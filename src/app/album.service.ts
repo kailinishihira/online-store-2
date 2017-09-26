@@ -12,16 +12,28 @@ export class AlbumService {
   }
 
   getAlbums() {
-    // return ALBUMS;
     return this.albums;
   }
 
-  getAlbumById(albumId: number){
-    for (let i = 0; i <= ALBUMS.length - 1; i++) {
-      if (ALBUMS[i].id === albumId) {
-        return ALBUMS[i];
-      }
-    }
+  addAlbum(newAlbum: Album) {
+   this.albums.push(newAlbum);
+ }
+
+  getAlbumById(albumId: string){
+    return this.database.object('albums/' + albumId);
+   }
+
+  updateAlbum(localUpdatedAlbum){
+    var albumEntryInFirebase = this.getAlbumById(localUpdatedAlbum.$key);
+    albumEntryInFirebase.update({
+      title: localUpdatedAlbum.title,
+      artist: localUpdatedAlbum.artist,
+      description: localUpdatedAlbum.description
+    });
   }
 
+  deleteAlbum(localAlbumToDelete){
+    var albumEntryInFirebase = this.getAlbumById(localAlbumToDelete.$key);
+    albumEntryInFirebase.remove();
+  }
 }

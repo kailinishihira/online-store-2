@@ -258,7 +258,7 @@ Database => Rules
 #### If you would like to upload an existing local json file to the Firebase database, select `Import JSON` from the database menu and select file to import.
 
 ### Retrieving Data from Firebase (you may also retrieve data from a component directly).
-Import dependencies into your app service or component file and declare the class property to FirebaseListObservable<any[]> type.
+Import dependencies into your app service or component file and declare the class property to FirebaseListObservable<any[]> type if we need a list or FirebaseObjectObservable<any> for a single object.
 `import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';`
 
 example:
@@ -267,6 +267,8 @@ example:
 export class AlbumService {
   albums: FirebaseListObservable<any[]>;
 ```
+
+We also need to define the service as 
 
 # OnlineStore
 
