@@ -22,11 +22,12 @@ constructor(
   private location: Location,
   private albumService: AlbumService) {}
 
-  ngOnInit() {
-      this.route.params.forEach((urlParameters) => {
-       this.albumId = parseInt(urlParameters['id']);
-     });
-     this.albumToDisplay = this.albumService.getAlbumById(this.albumId);
-    }
 
+
+  ngOnInit() {
+    this.route.params.forEach((urlParameters) => {
+      this.albumId = parseInt(urlParameters['id']);
+    });
+    this.albumToDisplay = this.albumService.getAlbumById(this.albumId);
+  }
 }

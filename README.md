@@ -170,8 +170,103 @@ Insert a `routerLink` into `app.component.html`
 
 
 
+##Create firebase
+`npm install angularfire2@4.0.0-rc.0 firebase --save`
 
+In tsconfig.json add `"types": [ "firebase" ]` to the very end of the file.
+```
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "outDir": "./dist/out-tsc",
+    "baseUrl": "src",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es5",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2016",
+      "dom"
+    ],
+    "types": [ "firebase" ]
+  }
+}
+```
+### Add Firebase credentials
+Create an account with [Firebase](https://firebase.google.com/).
+Create a new file in src/app directory `src/app/api-keys.ts` and paste the code (replace with your credentials):
+```
+export var masterFirebaseConfig = {
+    apiKey: "xxxx",
+    authDomain: "xxxx.firebaseapp.com",
+    databaseURL: "https://xxxx.firebaseio.com",
+    storageBucket: "xxxx.appspot.com",
+    messagingSenderId: "xxxx"
+  };
+```
+### Add file to .gitignore.
+```
+#Firebase credentials
+/src/app/api-keys.ts
+```
 
+### Import modules and export firebaseConfig into `app.module.ts`
+```
+import { masterFirebaseConfig } from './api-keys';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+
+export const firebaseConfig = {
+  apiKey: masterFirebaseConfig.apiKey,
+  authDomain: masterFirebaseConfig.authDomain,
+  databaseURL: masterFirebaseConfig.databaseURL,
+  storageBucket: masterFirebaseConfig.storageBucket
+};
+```
+
+### Update `imports` section in `app.module.ts`.
+```
+imports: [
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    routing,
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireDatabaseModule
+  ]
+  ```
+
+### Update Firebase rules to be "true" in the Firebase database.
+Database => Rules
+```
+{
+  "rules": {
+    ".read": "true",
+    ".write": "true"
+  }
+}
+```
+
+### Install promise-polyfill if you encounter error: Can't resolve 'promise-polyfill'
+`npm install promise-polyfill --save-exact`
+
+#### If you would like to upload an existing local json file to the Firebase database, select `Import JSON` from the database menu and select file to import.
+
+### Retrieving Data from Firebase (you may also retrieve data from a component directly).
+Import dependencies into your app service or component file and declare the class property to FirebaseListObservable<any[]> type.
+`import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';`
+
+example:
+```
+@Injectable()
+export class AlbumService {
+  albums: FirebaseListObservable<any[]>;
+```
 
 # OnlineStore
 
